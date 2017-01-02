@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.welcome {
+  display: block;
+  margin: 5px;
+}
+
+.result {
+  margin: auto;
+}
+
+.result > tr {
+  text-align: left;
+}
+
+.result > tr > td {
+  padding: 0 50px;
+}
+.code {
+  color: red;
+}
