@@ -1,7 +1,7 @@
 This project is intended to draft a consent app for the digital business platform.
 It is currently based on Kong, the API gateway from mashape. https://github.com/Mashape/kong
 
-Install and run the project:
+# Install and run the project:
 
 $ npm i
 
@@ -15,17 +15,17 @@ $ export PORT 3001
 
 <Still a work-in-progress>
 
-The complete procedure to test it step by step:
+# The complete procedure to test it step by step:
 
-Run container with postgres:
+## Run container with postgres:
 
 docker run -d --name kong-database -p 5432:5432 -e "POSTGRES_USER=kong" -e "POSTGRES_DB=kong" postgres:9.4
 
-Run Kong:
+## Run Kong:
 
 docker run -d --name kong --link kong-database:kong-database -e "KONG_DATABASE=postgres" -e "KONG_POSTGRES_CONTACT_POINTS=kong-database" -e "KONG_PG_HOST=kong-database" -p 8000:8000 -p 8443:8443 -p 8001:8001 -p 7946:7946 -p 7946:7946/udp kong
 
-Install httpie:
+## Install httpie:
 
 brew install httpie
 
@@ -33,7 +33,7 @@ Check installation:
 
 http http://localhost:8001
 
-Create new api:
+## Create new api:
 
 http POST http://localhost:8001/apis/  name=accounts upstream_url=https://dbpgo.herokuapp.com request_path=/accounts
 
@@ -61,7 +61,7 @@ Transfer-Encoding: chunked
     "upstream_url": "https://dbpgo.herokuapp.com"
 }
 
-Create consumer:
+## Create consumer:
 
 http POST http://localhost:8001/consumers username=seb
 
@@ -81,7 +81,7 @@ Transfer-Encoding: chunked
     "username": "seb"
 }
 
-Enable oauth2 on api, it will generate a provision key
+## Enable oauth2 on api, it will generate a provision key
 
 http POST http://localhost:8001/apis/accounts/plugins name=oauth2 config.enable_authorization_code=true config.scopes=xact config.mandatory_scope=true
 
@@ -117,7 +117,7 @@ Transfer-Encoding: chunked
     "name": "oauth2"
 }
 
-Create application (for a specific customer), it will generate an id and secret
+## Create application (for a specific customer), it will generate an id and secret
 
 http POST http://127.0.0.1:8001/consumers/seb/oauth2/ name=XactMobile redirect_uri=https://dbpgo.herokuapp.com
 
@@ -143,6 +143,8 @@ Transfer-Encoding: chunked
     ]
 }
 
+# Consent App
+
 Install and deploy CONSENT app as written above (beginning of README file)
 
 Run the consent app by launching a browser and type:
@@ -155,7 +157,7 @@ The consent app will only provide an access code.
 
 It is then up to the client application to request a token.
 
-To generate a access token:
+# Generate an access token:
 
 http https://127.0.0.1:8443/accounts/oauth2/token \
      grant_type=authorization_code \
@@ -182,6 +184,6 @@ Output:
   "expires_in":7200
 }
 
-To access the API:
+## To access the API:
 
 http http://localhost:8000/accounts Authorization:"Bearer fa11f165785844d5b05234262f8525a0"
