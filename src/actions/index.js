@@ -38,7 +38,6 @@ export function authorizeSuccess(response) {
 }
 
 export function authorize(params) {
-  //console.log('Authorize with params: ', params);
   return dispatch => {
     dispatch({
       [API_CALL_INFO]: {

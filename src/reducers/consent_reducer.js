@@ -16,7 +16,7 @@ class State extends StateRecord {
 const INITIAL_STATE = new State();
 
 export default function (state = INITIAL_STATE, action) {
-  console.log('Reducing: ', action);
+  //console.log('Reducing: ', action);
   switch (action.type) {
     // Clean state in case of re-authentication of the user 
     case AUTHENTICATE_REQUEST:

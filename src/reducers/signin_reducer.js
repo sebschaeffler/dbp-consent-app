@@ -6,7 +6,8 @@ import { AUTHENTICATE_REQUEST, AUTHENTICATE_SUCCESS, AUTHENTICATE_ERROR } from '
  **********************/
 const ParameterRecord = new Record({
   id: null,
-  password: null
+  password: null,
+  decodedChallenge: null
 });
 
 class Parameters extends ParameterRecord {
@@ -27,11 +28,11 @@ class State extends StateRecord {
 const INITIAL_STATE = new State();
 
 export default function (state = INITIAL_STATE, action) {
+  //console.log('Reducing: ', action);
   switch (action.type) {
     case AUTHENTICATE_REQUEST:
       return state.set('isProcessing', true);
     case AUTHENTICATE_SUCCESS:
-      //console.log('Action: ', action);
       const { parameters } = action;
       return state
         .set('isProcessing', false)

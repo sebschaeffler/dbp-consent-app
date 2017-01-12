@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 import { authorize } from '../actions';
 import { getParameters, isAuthorized, getCode } from '../selectors';
 
+// Hydra
+const PROVIDER = process.env.PROVIDER || 'hydra';
+
+// Kong parameters
 const PROVISION_KEY = 'f51d99d7e5514819890a1ef312d36c87';
 const SCOPE = 'xact';
 const RESPONSE_TYPE = 'code';
@@ -19,36 +23,42 @@ class Consent extends Component {
       isAuthorized: props.isAuthorized || false,
       code: props.code || ''
     };
-
     this.onSubmit = this.onSubmit.bind(this);
   }
 
   onSubmit(e) {
-    const params = {
-      authenticated_userid: this.state.parameters.id,
-      client_id: CLIENT_ID,
-      response_type: RESPONSE_TYPE,
-      scope: SCOPE,
-      provision_key: PROVISION_KEY
+    let params = {};
+    if (PROVIDER === 'hydra') {
+      params = {
+        challenge: this.state.parameters.challenge,
+        // assume that all scopes have been granted
+        scopes: this.state.parameters.challenge.scp,
+        authenticated_userid: this.state.parameters.id
+      }
+    } else {
+      params = {
+        authenticated_userid: this.state.parameters.id,
+        client_id: CLIENT_ID,
+        response_type: RESPONSE_TYPE,
+        scope: SCOPE,
+        provision_key: PROVISION_KEY
+      }
     }
     this.props.authorize(params);
     e.preventDefault();
   }
 
-  // componentWillMount() {
-  //   if (!this.props.isAuthenticated) {
-  //     this.redirectUser();
-  //   }
-  // }
-
-  // redirectUser() {
-  //   this.props.router.replace('/signin');
-  // }
-
   componentWillReceiveProps(nextProps) {
+    if (nextProps.code === null || !nextProps.code) {
+      console.log("Consent code is null or not defined");
+    }
+    const code = nextProps.code;
+    if (PROVIDER !== 'hydra') {
+      nextProps.code.substr(nextProps.code.length - nextProps.code.indexOf('='))
+    }
     // code is actually embedded in a redirect URI
     this.state = {
-      code: nextProps.code.substr(nextProps.code.length - nextProps.code.indexOf('='))
+      code
     }
   }
 
@@ -79,12 +89,15 @@ class Consent extends Component {
 
     return (
       <div width='100%'>
+        <br />
         <table className='result'>
-          <tr><td>User id</td><td>{this.props.parameters.id}</td></tr>
-          <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-          <tr><td>Provision Key</td><td>{PROVISION_KEY}</td></tr>
-          <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-          <tr><td>Authorization code</td><td className='code'>{this.state.code}</td></tr>
+          <tbody>
+            <tr><td>User id</td><td>{this.props.parameters.id}</td></tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td>Provision Key</td><td>{PROVISION_KEY}</td></tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td>Authorization code</td><td className='code'><span className='consent'>{this.state.code}</span></td></tr>
+          </tbody>
         </table>
       </div>
     );

@@ -8,8 +8,11 @@ class SignIn extends Component {
   constructor(props) {
     super(props);
 
+    const {query: {challenge}} = this.props.location;
+
     this.state = {
       id: (props.parameters ? props.parameters.id : '') || '',
+      challenge: challenge,
       password: (props.parameters ? props.parameters.password : '') || '',
       isProcessing: props.isProcessing || false,
       isAuthenticated: props.isAuthenticated || false
@@ -21,7 +24,7 @@ class SignIn extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('Is user', nextProps.parameters.id, ' authenticated?', nextProps.isAuthenticated);
+    //console.log("SignIn new props: ", nextProps.parameters);
     if (nextProps.isAuthenticated) {
       // If the user is already authenticated
       this.redirectUser();
@@ -36,7 +39,8 @@ class SignIn extends Component {
   buildParametersFromLocalState() {
     return {
       id: this.state.id !== '' ? this.state.id : null,
-      password: this.state.password !== '' ? this.state.password : null
+      password: this.state.password !== '' ? this.state.password : null,
+      challenge: this.state.challenge !== '' ? this.state.challenge : null
     };
   }
 

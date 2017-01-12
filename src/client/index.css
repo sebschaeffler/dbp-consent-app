@@ -13,13 +13,19 @@ body {
   margin: auto;
 }
 
-.result > tr {
+.result > tbody > tr {
   text-align: left;
 }
 
-.result > tr > td {
+.result > tbody > tr > td {
   padding: 0 50px;
 }
+
 .code {
   color: red;
+  max-width: 500px;
+}
+
+.consent {
+  word-wrap: break-word;
 }
