@@ -58,8 +58,8 @@ class SignIn extends Component {
 
   render() {
     return (
-      <div width='100%' >
-        <img
+      <div width='100%'>
+        {/*<img
           id='profile-img'
           alt=''
           src='//cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png'
@@ -67,25 +67,20 @@ class SignIn extends Component {
           width='200'
           />
         <br />
-        <br />
-        <form className='form-signin' onSubmit={this.onSubmit}>
+        <br />*/}
+        <form className='login' onSubmit={this.onSubmit}>
+          <p className="title">Log in</p>
           <input onChange={this.onIdParameterChange}
             type='text'
-            className='form-control'
             placeholder='Email address'
             required
             autoFocus value={this.state.id} />
-          <br />
-          <br />
           <input onChange={this.onPasswordParameterChange}
             type='password'
-            className='form-control'
             placeholder='Password'
             required
             value={this.state.password} />
-          <br />
-          <br />
-          <button className='btn btn-lg btn-primary btn-block btn-signin'
+          <button className='spinner'
             type='submit'
             disabled={this.state.isProcessing}>Sign in
             </button>

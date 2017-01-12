@@ -14,6 +14,8 @@ e.g. on MacOs or Linux:
 
 `$ export PORT 3003`
 
+![Alt text](./screenshots/login.png?raw=true "Login screen")
+
 # Step by step guide for HYDRA:
 
 ##Install hydra containers (i.e. hydra server, postgres database and consent application):
