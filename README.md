@@ -1,6 +1,8 @@
 This project is intended to draft a consent app for the digital business platform.
-It is currently based on Kong, the API gateway from mashape. https://github.com/Mashape/kong
-and Hydra, an authorization framework based on oauth2 and open id connect from ory-am: https://github.com/ory-am/hydra
+
+It is currently based on Kong, the API gateway from mashape: https://github.com/Mashape/kong
+
+and Hydra, an authorization framework based on oauth2 and Open ID Connect, from ory-am: https://github.com/ory-am/hydra
 
 # Install and run the project:
 
@@ -8,11 +10,11 @@ and Hydra, an authorization framework based on oauth2 and open id connect from o
 
 `$ npm run dev`
 
-The node server runs on port 3000, export a new env variable to change the default setting.
+The node server runs on port 3003, export a new env variable to change the default setting.
 
 e.g. on MacOs or Linux:
 
-`$ export PORT 3003`
+`$ export PORT 9000`
 
 ![Alt text](./screenshots/login.png?raw=true "Login screen")
 
@@ -35,6 +37,7 @@ Then: `docker-compose stop`
 AND: `docker-compose start`
 
 ## Then connect at least once to hydra to create the yaml file:
+
 `hydra connect`
 
 then press enter to leave the default settings:
@@ -46,9 +49,13 @@ client_id: admin
 client_secret: demo-password
 
 ## Generate a URL to get a challenge:
+
 `hydra token user`
+
 Copy the URL and paste it into the browser.
+
 The URL should look like this:
+
 `http://localhost:4444/oauth2/auth?client_id=admin&redirect_uri=http%3A%2F%2Flocalhost%3A4445%2Fcallback&response_type=code&scope=hydra+offline+openid&state=adopzymkowxidumwpngrinpf&nonce=xqxfrwwquabnzpkxwxkjfext`
 
 In the consent app, enter any email and password, then press authorise to get a consent token.
