@@ -44,10 +44,10 @@ client_id: admin
 client_secret: demo-password
 
 ## Generate a URL to get a challenge:
-hydra token user
+`hydra token user`
 Copy the URL and paste it into the browser.
 The URL should look like this:
-http://localhost:4444/oauth2/auth?client_id=admin&redirect_uri=http%3A%2F%2Flocalhost%3A4445%2Fcallback&response_type=code&scope=hydra+offline+openid&state=adopzymkowxidumwpngrinpf&nonce=xqxfrwwquabnzpkxwxkjfext
+`http://localhost:4444/oauth2/auth?client_id=admin&redirect_uri=http%3A%2F%2Flocalhost%3A4445%2Fcallback&response_type=code&scope=hydra+offline+openid&state=adopzymkowxidumwpngrinpf&nonce=xqxfrwwquabnzpkxwxkjfext`
 
 In the consent app, enter any email and password, then press authorise to get a consent token.
 
