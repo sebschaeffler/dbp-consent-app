@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { authorize } from '../actions';
-import { getParameters, isAuthorized, getCode } from '../selectors';
+import { getParameters, isAuthorized, getCode, getConsentError } from '../selectors';
 
 // Hydra
 const PROVIDER = process.env.PROVIDER || 'hydra';
@@ -21,9 +21,11 @@ class Consent extends Component {
       parameters: props.parameters,
       isProcessing: props.isProcessing || false,
       isAuthorized: props.isAuthorized || false,
-      code: props.code || ''
+      code: props.code || '',
+      error: props.consentError || null
     };
     this.onSubmit = this.onSubmit.bind(this);
+    this.renderError = this.renderError.bind(this);
   }
 
   onSubmit(e) {
@@ -49,8 +51,14 @@ class Consent extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    if (nextProps.signInError !== null && nextProps.signInError) {
+      console.log("Errorerror: ", nextProps.signInError);
+      this.setState({ error: nextProps.signInError });
+      return;
+    }
     if (nextProps.code === null || !nextProps.code) {
       console.log("Consent code is null or not defined");
+      return;
     }
     const code = nextProps.code;
     if (PROVIDER !== 'hydra') {
@@ -62,27 +70,40 @@ class Consent extends Component {
     }
   }
 
+  renderError() {
+    if (this.state.error !== null) {
+      return (
+        <div className="error">
+          {this.state.error}
+        </div>
+      );
+    }
+  }
+
   render() {
     if (!this.props.isAuthorized) {
       return (
         <div width='100%'>
           <br />
           <span className='welcome'>Welcome {this.props.parameters.id}</span>
-          <img
+          {/*<img
             id='profile-img'
             alt=''
             src='https://openclipart.org/download/184625/1381071925.svg'
             height='200'
             width='200'
             />
+          */}
           <br />
           <br />
-          <form className='form-signin' onSubmit={this.onSubmit}>
+          <form className='login' onSubmit={this.onSubmit}>
+            Do you authorize 'Demo-App' to access your resources?
             <button
-              className='btn btn-lg btn-primary btn-block btn-signin'
+              className='spinner'
               type='submit'>Authorize
           </button>
           </form>
+          {this.renderError()}
         </div>
       );
     }
@@ -108,7 +129,8 @@ const mapStateToProps = (state) => {
   return {
     parameters: getParameters(state),
     isAuthorized: isAuthorized(state),
-    code: getCode(state)
+    code: getCode(state),
+    consentError: getConsentError(state)
   };
 };
 

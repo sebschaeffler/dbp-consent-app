@@ -31,7 +31,7 @@ export default (app) => {
         if (PROVIDER === 'hydra') {
             hydra.verifyConsentChallenge(challenge).then(({decodedChallenge}) => {
                 //console.log("Decoded challenge: ", decodedChallenge);
-                w.send({ id, password, challenge: decodedChallenge});
+                w.send({ id, password, challenge: decodedChallenge });
             }).catch((error) => {
                 w.status(500);
                 console.log(error);
@@ -63,7 +63,7 @@ export default (app) => {
             }).catch((error) => {
                 console.log('An error occurred on consent: ', error);
                 w.status(500);
-                w.send(error);
+                w.send({ error });
             });
         } else {
             // In order to simulate an error, remove the "send" part with the parameters

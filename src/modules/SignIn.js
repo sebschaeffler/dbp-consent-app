@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { authenticate } from '../actions';
-import { getParameters, isProcessing, isAuthenticated } from '../selectors';
+import { getParameters, isProcessing, isAuthenticated, getSignInError } from '../selectors';
 
 class SignIn extends Component {
 
@@ -15,12 +15,14 @@ class SignIn extends Component {
       challenge: challenge,
       password: (props.parameters ? props.parameters.password : '') || '',
       isProcessing: props.isProcessing || false,
-      isAuthenticated: props.isAuthenticated || false
+      isAuthenticated: props.isAuthenticated || false,
+      error: props.signInError || null
     };
 
     this.onIdParameterChange = this.onIdParameterChange.bind(this);
     this.onPasswordParameterChange = this.onPasswordParameterChange.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.renderError = this.renderError.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -28,6 +30,9 @@ class SignIn extends Component {
     if (nextProps.isAuthenticated) {
       // If the user is already authenticated
       this.redirectUser();
+    } else if (nextProps.signInError !== null && nextProps.signInError) {
+      console.log("Errorerror: ", nextProps.signInError);
+      this.setState({ error: nextProps.signInError });
     }
   }
 
@@ -54,6 +59,16 @@ class SignIn extends Component {
 
   redirectUser() {
     this.props.router.push('/consent');
+  }
+
+  renderError() {
+    if (this.state.error !== null) {
+      return (
+        <div className="error">
+          {this.state.error}
+        </div>
+      );
+    }
   }
 
   render() {
@@ -85,6 +100,7 @@ class SignIn extends Component {
             disabled={this.state.isProcessing}>Sign in
             </button>
         </form>
+        {this.renderError()}
       </div>
     );
   }
@@ -95,7 +111,8 @@ const mapStateToProps = (state) => {
   return {
     parameters: getParameters(state),
     isProcessing: isProcessing(state),
-    isAuthenticated: isAuthenticated(state)
+    isAuthenticated: isAuthenticated(state),
+    signInError: getSignInError(state)
   };
 };
 

@@ -19,7 +19,8 @@ class Parameters extends ParameterRecord {
 const StateRecord = new Record({
   isProcessing: false,
   isAuthenticated: false,
-  parameters: new Parameters()
+  parameters: new Parameters(),
+  error: null
 });
 
 class State extends StateRecord {
@@ -31,7 +32,8 @@ export default function (state = INITIAL_STATE, action) {
   //console.log('Reducing: ', action);
   switch (action.type) {
     case AUTHENTICATE_REQUEST:
-      return state.set('isProcessing', true);
+      return state.set('isProcessing', true)
+        .set('error', null);
     case AUTHENTICATE_SUCCESS:
       const { parameters } = action;
       return state
@@ -39,9 +41,12 @@ export default function (state = INITIAL_STATE, action) {
         .set('isAuthenticated', true)
         .update('parameters', (params) =>
           parameters
-        );
+        )
+        .set('error', null);
     case AUTHENTICATE_ERROR:
-      return state.set('isProcessing', false);
+      const { errorMessage } = action;
+      return state.set('isProcessing', false)
+        .set('error', errorMessage.error);
     default:
       return state;
   }

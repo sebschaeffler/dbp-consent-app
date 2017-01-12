@@ -190,3 +190,9 @@ footer a, footer a:link {
 .consent {
   word-wrap: break-word;
 }
+
+.error {
+  width: 320px;
+  padding: 20px 0;
+  color: red;
+}

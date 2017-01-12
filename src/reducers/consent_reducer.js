@@ -7,7 +7,8 @@ import { AUTHENTICATE_REQUEST, AUTHORIZE_REQUEST, AUTHORIZE_SUCCESS, AUTHORIZE_E
 const StateRecord = new Record({
   isProcessing: false,
   isAuthorized: false,
-  code: ''
+  code: '',
+  error: null
 });
 
 class State extends StateRecord {
@@ -23,19 +24,24 @@ export default function (state = INITIAL_STATE, action) {
       return state
         .set('isProcessing', false)
         .set('isAuthorized', false)
-        .set('code', '');
+        .set('code', '')
+        .set('error', null);
     case AUTHORIZE_REQUEST:
       return state
-        .set('isProcessing', true);
+        .set('isProcessing', true)
+        .set('error', null);
     case AUTHORIZE_SUCCESS:
       const { response } = action;
       return state
         .set('isProcessing', false)
         .set('isAuthorized', true)
-        .set('code', response.code);
+        .set('code', response.code)
+        .set('error', null);
     case AUTHORIZE_ERROR:
+      const { errorMessage } = action;
       return state
-        .set('isProcessing', false);
+        .set('isProcessing', false)
+        .set('error', errorMessage.error);
     default:
       return state;
   }
