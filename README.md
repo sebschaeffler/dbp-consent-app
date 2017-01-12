@@ -18,6 +18,16 @@ e.g. on MacOs or Linux:
 
 ![Alt text](./screenshots/login.png?raw=true "Login screen")
 
+# Set up the authorization server
+
+Hydra is the default authorization server, to change it and switch to Kong, the following environment variable needs to be exported:
+
+`export PROVIDER=kong`
+
+To switch back to Hydra, either delete the environment variable or change it to:
+
+`export PROVIDER=hydra`
+
 # Step by step guide for HYDRA:
 
 ##Install hydra containers (i.e. hydra server, postgres database and consent application):
