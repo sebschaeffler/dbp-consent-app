@@ -196,3 +196,7 @@ footer a, footer a:link {
   padding: 20px 0;
   color: red;
 }
+
+.label {
+  color: #000;
+}

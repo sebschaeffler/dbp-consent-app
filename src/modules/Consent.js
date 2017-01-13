@@ -113,13 +113,13 @@ class Consent extends Component {
     return (
       <div width='100%'>
         <br />
-        <table className='result'>
+        <table className='login result'>
           <tbody>
-            <tr><td>User id</td><td>{this.props.parameters.id}</td></tr>
+            <tr><td><span className="label">UserId</span></td><td><span className="label">{this.props.parameters.id}</span></td></tr>
             {/*<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
             <tr><td>Provision Key</td><td>{PROVISION_KEY}</td></tr>*/}
             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td>Token</td><td className='code'><span className='consent'>{this.state.code}</span></td></tr>
+            <tr><td><span className="label">Token</span></td><td className='code'><span className='consent'>{this.state.code}</span></td></tr>
           </tbody>
         </table>
       </div>
