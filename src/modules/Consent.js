@@ -97,7 +97,9 @@ class Consent extends Component {
           <br />
           <br />
           <form className='login' onSubmit={this.onSubmit}>
-            Do you authorize 'Demo-App' to access your resources?
+            <span className="title">
+              Do you authorize 'Demo-App' to access your resources: {this.state.parameters.scopes}?
+            </span>
             <button
               className='spinner'
               type='submit'>Authorize
@@ -114,10 +116,10 @@ class Consent extends Component {
         <table className='result'>
           <tbody>
             <tr><td>User id</td><td>{this.props.parameters.id}</td></tr>
+            {/*<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td>Provision Key</td><td>{PROVISION_KEY}</td></tr>*/}
             <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td>Provision Key</td><td>{PROVISION_KEY}</td></tr>
-            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td>Authorization code</td><td className='code'><span className='consent'>{this.state.code}</span></td></tr>
+            <tr><td>Token</td><td className='code'><span className='consent'>{this.state.code}</span></td></tr>
           </tbody>
         </table>
       </div>

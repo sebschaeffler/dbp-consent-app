@@ -8,8 +8,8 @@ const PROVIDER = process.env.PROVIDER || 'hydra';
 const NODE_TLS_REJECT_UNAUTHORIZED = '0';
 
 const hydra = new Hydra({
-    clientID: process.env.HYDRA_CLIENT_ID || 'admin',
-    clientSecret: process.env.HYDRA_CLIENT_SECRET || 'demo-password',
+    clientID: process.env.HYDRA_CLIENT_ID || 'admin', //admin',
+    clientSecret: process.env.HYDRA_CLIENT_SECRET || 'demo-password', // 'demo-password',
     endpoint: process.env.HYDRA_URL || 'http://localhost:4444'
 });
 
