@@ -9,7 +9,7 @@ export default class AppLayout extends Component {
           Consent App 0.1 Alpha
         </div>*/}
         {this.props.children}
-        <footer><a target="blank" href="#">Consent App 0.1</a></footer>
+        <footer>Digital Business Platform - Consent App - 2017</footer>
       </div>
     );
   }
