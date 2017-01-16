@@ -137,13 +137,9 @@ class Consent extends Component {
     if (!this.props.isAuthorized && !this.state.cancelProcess) {
       return (
         <div width='100%'>
-          <br />
-          <span className='welcome'>Welcome {this.props.parameters.id}</span>
-          <br />
-          <br />
           <form className='consent'>
             <div>
-              <div className="title">Consent</div>
+              <div className="title">Welcome {this.props.parameters.id}</div>
               <div className="label resources">Do you authorize 'DBP-Demo-App' to access your resources?
                  <ul>
                   {this.state.parameters.decodedChallenge.scp.map(function (scope) {
