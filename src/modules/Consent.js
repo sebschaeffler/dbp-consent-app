@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import FontAwesome from 'react-fontawesome';
 import { authorize } from '../actions';
 import { getParameters, isAuthorized, getCode, getConsentError } from '../selectors';
 import utils from '../utils/utils';
@@ -118,14 +119,21 @@ class Consent extends Component {
         </table>
       );
     } else {
-      this.redirectToClientApp(this.state.code);
+      setTimeout(function () {
+        this.redirectToClientApp(this.state.code);
+      }.bind(this), 1500);
       return (
-        <div className='consent'>
+        <div className='consent result'>
           <div className="title">
             Please wait
           </div>
           <div className="label">
-            You will be redirected shortly...
+            <FontAwesome
+              className='spinner'
+              name='spinner' />
+            <span>
+              You will be redirected shortly...
+            </span>
           </div>
         </div>
       );
@@ -143,14 +151,15 @@ class Consent extends Component {
               <div className="label resources">Do you authorize 'DBP-Demo-App' to access your resources?
                  <ul>
                   {this.state.parameters.decodedChallenge.scp.map(function (scope) {
-                    return (<li id="scope">{scope}</li>);
+                    return (<li key={scope}>{scope}</li>);
                   })}
                 </ul>
               </div>
               <div>
                 <button
-                  className='spinner ok'
                   onClick={this.onSubmit}>
+                  <FontAwesome
+                    name='spinner' />
                   Authorize
                 </button>
                 <button

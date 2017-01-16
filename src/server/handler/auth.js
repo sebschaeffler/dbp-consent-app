@@ -30,8 +30,10 @@ export default (app) => {
         }
         if (PROVIDER === 'hydra') {
             hydra.verifyConsentChallenge(challenge).then(({decodedChallenge}) => {
-                //console.log("Verify challenge", challenge, "Decoded challenge: ", decodedChallenge);
-                w.send({ id, password, challenge, decodedChallenge });
+                // 'simulate' authentication network lag...
+                setTimeout(function () {
+                    w.send({ id, password, challenge, decodedChallenge });
+                }, 1000);
             }).catch((error) => {
                 w.status(500);
                 console.log(error);

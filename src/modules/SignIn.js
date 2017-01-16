@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import FontAwesome from 'react-fontawesome';
 import { authenticate } from '../actions';
 import { getParameters, isProcessing, isAuthenticated, getSignInError } from '../selectors';
 
@@ -26,12 +27,23 @@ class SignIn extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.isAuthenticated) {
+    if (nextProps.isProcessing) {
+      //console.log("Processing...");
+      this.setState({ isProcessing: true });
+    } else if (nextProps.isAuthenticated) {
+      //console.log("Authenticated!");
+      this.setState({ isAuthenticated: true });
       // If the user is already authenticated
-      this.redirectUser();
+      setTimeout(function () {
+        this.redirectUser();
+      }.bind(this), 1500);
     } else if (nextProps.signInError !== null && nextProps.signInError) {
       //console.log("Errorerror: ", nextProps.signInError);
-      this.setState({ error: nextProps.signInError });
+      this.setState({ 
+        isProcessing: false,
+        isAuthenticated: false,
+        error: nextProps.signInError 
+      });
     }
   }
 
@@ -73,20 +85,10 @@ class SignIn extends Component {
   render() {
     return (
       <div width='100%'>
-        {/*<img
-          id='profile-img'
-          alt=''
-          src='//cdn2.iconfinder.com/data/icons/ios-7-icons/50/user_male2-512.png'
-          height='200'
-          width='200'
-          />
-        <br />
-        <br />*/}
-        <form 
-          className='login {this.state.isProcessing ? loading} {nextProps.isAuthenticated ? ok}' 
-          onSubmit={this.onSubmit} 
-          ref="loginForm">
-          <p className="title">Log in</p>
+        <form
+          className={this.state.isAuthenticated ? 'login loading ok' : this.state.isProcessing ? 'login loading' : 'login'}
+          onSubmit={this.onSubmit}>
+          <p className="title">Please sign in</p>
           <input onChange={this.onIdParameterChange}
             type='text'
             placeholder='Email address'
@@ -100,8 +102,10 @@ class SignIn extends Component {
           <button
             type='submit'
             disabled={this.state.isProcessing}>
-            <i class="spinner"></i>
-            <span class="state" ref="state">Log in</span>
+            <FontAwesome
+              className='spinner'
+              name='spinner' />
+            <span className="state">{this.state.isAuthenticated ? 'Authenticated' : this.state.isProcessing ? 'Signing in...' : 'Sign in'}</span>
           </button>
         </form>
         {this.renderError()}
