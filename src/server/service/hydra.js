@@ -31,7 +31,7 @@ const filter = (obj, predicate) => {
 
 const warn = () => {
   if (process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0') {
-    //console.warn('Skipping TLS Verification because NODE_TLS_REJECT_UNAUTHORIZED is set to 0');
+    console.warn('Skipping TLS Verification because NODE_TLS_REJECT_UNAUTHORIZED is set to 0');
   }
 }
 
@@ -90,6 +90,7 @@ class Hydra {
       this.getKey('hydra.consent.challenge', 'public').then((key) => {
         //console.log("Challenge: ", challenge, " PEM: ", jwkToPem(key));
         jwt.verify(challenge, jwkToPem(key), (error, decoded) => {
+          //console.log("Decoded challenge: ", decoded);
           if (error) {
             return reject({ error: 'Could not verify consent challenge: ' + error });
           }
@@ -119,7 +120,7 @@ class Hydra {
             return reject({ error: 'Could not verify consent challenge: ' + error });
           }
           resolve({ consent: token });
-        })
+        });
       }).catch(reject);
     })
   }

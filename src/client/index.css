@@ -14,11 +14,9 @@ body {
     transform: rotateZ(359deg);
   }
 }
-
 * {
   box-sizing: border-box;
 }
-
 #root {
   display: flex;
   align-items: center;
@@ -30,8 +28,7 @@ body {
   background: rgba(4, 40, 68, 0.65);
   text-align: center;
 }
-
-.login {
+.login, .consent {
   border-radius: 2px 2px 5px 5px;
   padding: 10px 20px 20px 20px;
   width: 90%;
@@ -41,19 +38,18 @@ body {
   padding-bottom: 80px;
   box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
 }
-
-.login.loading button {
+.login.loading button, .consent.loading button {
   max-height: 100%;
   padding-top: 50px;
 }
-.login.loading button .spinner {
+.login.loading button .spinner, .consent.loading button .spinner {
   opacity: 1;
   top: 40%;
 }
-.login.ok button {
+.login.ok button, .consent.ok button {
   background-color: #8bc34a;
 }
-.login.ok button .spinner {
+.login.ok button .spinner, .consent.ok button .spinner {
   border-radius: 0;
   border-top-color: transparent;
   border-right-color: transparent;
@@ -91,12 +87,12 @@ body {
   left: 30px;
   transition: all 0.25s ease-out;
 }
-.login a {
+.login a, .consent a {
   font-size: 0.8em;
   color: #2196F3;
   text-decoration: none;
 }
-.login .title {
+.login .title, .consent .title {
   color: #444;
   font-size: 1.2em;
   font-weight: bold;
@@ -104,7 +100,7 @@ body {
   border-bottom: 1px solid #eee;
   padding-bottom: 20px;
 }
-.login button {
+.login button, .consent button {
   width: 100%;
   height: 100%;
   padding: 10px 10px;
@@ -123,7 +119,19 @@ body {
   transition: all 0.1s ease-out;
   border-bottom-width: 7px;
 }
-.login button .spinner {
+.consent button {
+  width: 50%;
+}
+.cancel {
+  left: initial !important;
+  right: 0;
+  background: none !important;
+  opacity: 1;
+  border-top: solid 1px #eee !important;
+  text-decoration: underline;
+  color: #aaa !important;
+}
+.login button .spinner, .consent button .spinner {
   display: block;
   width: 40px;
   height: 40px;
@@ -140,13 +148,18 @@ body {
   transition: top 0.3s 0.3s ease, opacity 0.3s 0.3s ease, border-radius 0.3s ease;
   box-shadow: 0px 1px 0px rgba(0, 0, 0, 0.2);
 }
-.login:not(.loading) button:hover {
+.login:not(.loading) button:hover, .consent:not(.loading) button:hover {
   box-shadow: 0px 1px 3px #2196F3;
 }
-.login:not(.loading) button:focus {
+.login:not(.loading) button:focus, .consent:not(.loading) button:focus {
   border-bottom-width: 4px;
 }
-
+.resources {
+  text-align: left;
+}
+.resources li {
+  color: red;
+}
 footer {
   display: block;
   padding-top: 50px;

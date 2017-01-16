@@ -2,9 +2,11 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { authorize } from '../actions';
 import { getParameters, isAuthorized, getCode, getConsentError } from '../selectors';
+import utils from '../utils/utils';
 
 // Hydra
 const PROVIDER = process.env.PROVIDER || 'hydra';
+const DBP_DEMO = process.env.DBP_DEMO || false;
 
 // Kong parameters
 const PROVISION_KEY = 'f51d99d7e5514819890a1ef312d36c87';
@@ -22,17 +24,23 @@ class Consent extends Component {
       isProcessing: props.isProcessing || false,
       isAuthorized: props.isAuthorized || false,
       code: props.code || '',
-      error: props.consentError || null
+      error: props.consentError || null,
+      cancelProcess: false
     };
     this.onSubmit = this.onSubmit.bind(this);
+    this.onCancel = this.onCancel.bind(this);
+    this.redirectToClientApp = this.redirectToClientApp.bind(this);
     this.renderError = this.renderError.bind(this);
+    this.renderFinal = this.renderFinal.bind(this);
   }
 
   onSubmit(e) {
+    e.preventDefault();
     let params = {};
     if (PROVIDER === 'hydra') {
       params = {
         challenge: this.state.parameters.challenge,
+        decodedChallenge: this.state.parameters.decodedChallenge,
         // assume that all scopes have been granted
         scopes: this.state.parameters.challenge.scp,
         authenticated_userid: this.state.parameters.id
@@ -47,24 +55,28 @@ class Consent extends Component {
       }
     }
     this.props.authorize(params);
+  }
+
+  onCancel(e) {
     e.preventDefault();
+    this.setState({ cancelProcess: true });
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.signInError !== null && nextProps.signInError) {
-      console.log("Errorerror: ", nextProps.signInError);
+      //console.log("Errorerror: ", nextProps.signInError);
       this.setState({ error: nextProps.signInError });
       return;
     }
     if (nextProps.code === null || !nextProps.code) {
-      console.log("Consent code is null or not defined");
+      //console.log("Consent code is null or not defined");
       return;
     }
     const code = nextProps.code;
     if (PROVIDER !== 'hydra') {
       nextProps.code.substr(nextProps.code.length - nextProps.code.indexOf('='))
     }
-    // code is actually embedded in a redirect URI
+
     this.state = {
       code
     }
@@ -80,30 +92,78 @@ class Consent extends Component {
     }
   }
 
+  redirectToClientApp(code) {
+    if (!this.props.parameters.decodedChallenge.redir) {
+      //console.log("No redirection URI found in challenge");
+      return;
+    }
+    let uri = utils.getParams(this.props.parameters.decodedChallenge.redir).redirect_uri;
+    if (code !== null && code) {
+      uri = `${uri}?consent=${code}`;
+    }
+    //console.log("Redirection to: ", uri);
+    window.location = uri;
+    return;
+  }
+
+  renderFinal() {
+    if (DBP_DEMO) {
+      return (
+        <table className='consent result'>
+          <tbody>
+            <tr><td><span className="label">UserId</span></td><td><span className="label">{this.props.parameters.id}</span></td></tr>
+            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
+            <tr><td><span className="label">Token</span></td><td className='code'><span className='consent'>{this.state.code}</span></td></tr>
+          </tbody>
+        </table>
+      );
+    } else {
+      this.redirectToClientApp(this.state.code);
+      return (
+        <div className='consent'>
+          <div className="title">
+            Please wait
+          </div>
+          <div className="label">
+            You will be redirected shortly...
+          </div>
+        </div>
+      );
+    }
+  }
+
   render() {
-    if (!this.props.isAuthorized) {
+    //console.log(this.state);
+    if (!this.props.isAuthorized && !this.state.cancelProcess) {
       return (
         <div width='100%'>
           <br />
           <span className='welcome'>Welcome {this.props.parameters.id}</span>
-          {/*<img
-            id='profile-img'
-            alt=''
-            src='https://openclipart.org/download/184625/1381071925.svg'
-            height='200'
-            width='200'
-            />
-          */}
           <br />
           <br />
-          <form className='login' onSubmit={this.onSubmit}>
-            <span className="title">
-              Do you authorize 'Demo-App' to access your resources: {this.state.parameters.scopes}?
-            </span>
-            <button
-              className='spinner'
-              type='submit'>Authorize
-          </button>
+          <form className='consent'>
+            <div>
+              <div className="title">Consent</div>
+              <div className="label resources">Do you authorize 'DBP-Demo-App' to access your resources?
+                 <ul>
+                  {this.state.parameters.decodedChallenge.scp.map(function (scope) {
+                    return (<li id="scope">{scope}</li>);
+                  })}
+                </ul>
+              </div>
+              <div>
+                <button
+                  className='spinner ok'
+                  onClick={this.onSubmit}>
+                  Authorize
+                </button>
+                <button
+                  className='cancel'
+                  onClick={this.onCancel}>
+                  Cancel
+                </button>
+              </div>
+            </div>
           </form>
           {this.renderError()}
         </div>
@@ -113,18 +173,10 @@ class Consent extends Component {
     return (
       <div width='100%'>
         <br />
-        <table className='login result'>
-          <tbody>
-            <tr><td><span className="label">UserId</span></td><td><span className="label">{this.props.parameters.id}</span></td></tr>
-            {/*<tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td>Provision Key</td><td>{PROVISION_KEY}</td></tr>*/}
-            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td><span className="label">Token</span></td><td className='code'><span className='consent'>{this.state.code}</span></td></tr>
-          </tbody>
-        </table>
+        {this.renderFinal()}
       </div>
     );
-  };
+  }
 }
 
 const mapStateToProps = (state) => {

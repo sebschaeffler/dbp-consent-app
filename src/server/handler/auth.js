@@ -1,5 +1,5 @@
 import request from 'superagent';
-import Hydra from '../service/hydra'
+import Hydra from '../service/hydra';
 require('superagent-auth-bearer')(request);
 
 const URL = 'https://127.0.0.1:8443/accounts/oauth2/authorize';
@@ -30,8 +30,8 @@ export default (app) => {
         }
         if (PROVIDER === 'hydra') {
             hydra.verifyConsentChallenge(challenge).then(({decodedChallenge}) => {
-                //console.log("Decoded challenge: ", decodedChallenge);
-                w.send({ id, password, challenge: decodedChallenge });
+                //console.log("Verify challenge", challenge, "Decoded challenge: ", decodedChallenge);
+                w.send({ id, password, challenge, decodedChallenge });
             }).catch((error) => {
                 w.status(500);
                 console.log(error);
@@ -43,7 +43,8 @@ export default (app) => {
     });
 
     app.post('/api/consent', (r, w) => {
-        const {authenticated_userid, challenge, scopes} = r.body.params;
+        const {authenticated_userid, challenge, decodedChallenge, scopes} = r.body.params;
+        //console.log("Before calling hydra for consent: ", decodedChallenge);
         if (authenticated_userid === null) {
             w.status(401);
             w.send({ error: 'Invalid user' });
@@ -58,7 +59,6 @@ export default (app) => {
                 w.send({ error: errMsg });
             }
             hydra.generateConsentToken(authenticated_userid, scopes, challenge).then(({consent}) => {
-                console.log("Consent: ", consent);
                 w.send({ code: consent });
             }).catch((error) => {
                 console.log('An error occurred on consent: ', error);
@@ -82,4 +82,5 @@ export default (app) => {
             });
         }
     });
+
 }

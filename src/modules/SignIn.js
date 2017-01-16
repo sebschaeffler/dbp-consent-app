@@ -26,19 +26,18 @@ class SignIn extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    //console.log("SignIn new props: ", nextProps.parameters);
     if (nextProps.isAuthenticated) {
       // If the user is already authenticated
       this.redirectUser();
     } else if (nextProps.signInError !== null && nextProps.signInError) {
-      console.log("Errorerror: ", nextProps.signInError);
+      //console.log("Errorerror: ", nextProps.signInError);
       this.setState({ error: nextProps.signInError });
     }
   }
 
   onSubmit(e) {
-    this.props.authenticate(this.buildParametersFromLocalState());
     e.preventDefault();
+    this.props.authenticate(this.buildParametersFromLocalState());
   }
 
   buildParametersFromLocalState() {
@@ -83,7 +82,10 @@ class SignIn extends Component {
           />
         <br />
         <br />*/}
-        <form className='login' onSubmit={this.onSubmit}>
+        <form 
+          className='login {this.state.isProcessing ? loading} {nextProps.isAuthenticated ? ok}' 
+          onSubmit={this.onSubmit} 
+          ref="loginForm">
           <p className="title">Log in</p>
           <input onChange={this.onIdParameterChange}
             type='text'
@@ -95,10 +97,12 @@ class SignIn extends Component {
             placeholder='Password'
             required
             value={this.state.password} />
-          <button className='spinner'
+          <button
             type='submit'
-            disabled={this.state.isProcessing}>Sign in
-            </button>
+            disabled={this.state.isProcessing}>
+            <i class="spinner"></i>
+            <span class="state" ref="state">Log in</span>
+          </button>
         </form>
         {this.renderError()}
       </div>

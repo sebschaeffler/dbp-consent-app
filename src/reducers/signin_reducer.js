@@ -7,6 +7,7 @@ import { AUTHENTICATE_REQUEST, AUTHENTICATE_SUCCESS, AUTHENTICATE_ERROR } from '
 const ParameterRecord = new Record({
   id: null,
   password: null,
+  challenge: null,
   decodedChallenge: null
 });
 
@@ -35,12 +36,12 @@ export default function (state = INITIAL_STATE, action) {
       return state.set('isProcessing', true)
         .set('error', null);
     case AUTHENTICATE_SUCCESS:
-      const { parameters } = action;
+      const { response } = action;
       return state
         .set('isProcessing', false)
         .set('isAuthenticated', true)
         .update('parameters', (params) =>
-          parameters
+          response
         )
         .set('error', null);
     case AUTHENTICATE_ERROR:
