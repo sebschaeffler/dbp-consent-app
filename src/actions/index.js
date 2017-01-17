@@ -23,7 +23,7 @@ export function authorizeRequest(params) {
 
 export function authorizeError(params) {
   return {
-    type: AUTHENTICATE_ERROR,
+    type: AUTHORIZE_ERROR,
     params
   };
 }

@@ -30,7 +30,7 @@ class Consent extends Component {
     };
     this.onSubmit = this.onSubmit.bind(this);
     this.onCancel = this.onCancel.bind(this);
-    this.redirectToClientApp = this.redirectToClientApp.bind(this);
+    this.redirectToHydraWithSignedChallenge = this.redirectToHydraWithSignedChallenge.bind(this);
     this.renderError = this.renderError.bind(this);
     this.renderFinal = this.renderFinal.bind(this);
   }
@@ -93,17 +93,17 @@ class Consent extends Component {
     }
   }
 
-  redirectToClientApp(code) {
+  redirectToHydraWithSignedChallenge(code) {
     if (!this.props.parameters.decodedChallenge.redir) {
       //console.log("No redirection URI found in challenge");
       return;
     }
-    let uri = utils.getParams(this.props.parameters.decodedChallenge.redir).redirect_uri;
+    // Needs to redirects back to hydra with the signed consent
     if (code !== null && code) {
-      uri = `${uri}?consent=${code}`;
+      const uri = `${this.props.parameters.decodedChallenge.redir}&consent=${code}`;
+      //console.log("Redirection to: ", uri);
+      window.location = uri;
     }
-    //console.log("Redirection to: ", uri);
-    window.location = uri;
     return;
   }
 
@@ -120,7 +120,7 @@ class Consent extends Component {
       );
     } else {
       setTimeout(function () {
-        this.redirectToClientApp(this.state.code);
+        this.redirectToHydraWithSignedChallenge(this.state.code);
       }.bind(this), 1500);
       return (
         <div className='consent result'>

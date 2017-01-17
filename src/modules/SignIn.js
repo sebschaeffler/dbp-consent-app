@@ -10,6 +10,7 @@ class SignIn extends Component {
     super(props);
 
     const {query: {challenge}} = this.props.location;
+    const {query: {error}} = this.props.location;
 
     this.state = {
       id: (props.parameters ? props.parameters.id : '') || '',
@@ -17,7 +18,7 @@ class SignIn extends Component {
       password: (props.parameters ? props.parameters.password : '') || '',
       isProcessing: props.isProcessing || false,
       isAuthenticated: props.isAuthenticated || false,
-      error: props.signInError || null
+      error: error || null
     };
 
     this.onIdParameterChange = this.onIdParameterChange.bind(this);
