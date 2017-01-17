@@ -99,11 +99,14 @@ class Consent extends Component {
       return;
     }
     // Needs to redirects back to hydra with the signed consent
+    let uri = this.props.parameters.decodedChallenge.redir;
     if (code !== null && code) {
-      const uri = `${this.props.parameters.decodedChallenge.redir}&consent=${code}`;
-      //console.log("Redirection to: ", uri);
-      window.location = uri;
+      uri = `${this.props.parameters.decodedChallenge.redir}&consent=${code}`;
+    } else {
+      uri = utils.getParams(uri).redirect_uri;
     }
+    //console.log("Redirection to: ", uri);
+    window.location = uri;
     return;
   }
 
