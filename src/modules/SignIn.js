@@ -40,10 +40,10 @@ class SignIn extends Component {
       }.bind(this), 1500);
     } else if (nextProps.signInError !== null && nextProps.signInError) {
       //console.log("Errorerror: ", nextProps.signInError);
-      this.setState({ 
+      this.setState({
         isProcessing: false,
         isAuthenticated: false,
-        error: nextProps.signInError 
+        error: nextProps.signInError
       });
     }
   }
@@ -85,7 +85,7 @@ class SignIn extends Component {
 
   render() {
     return (
-      <div width='100%'>
+      <div width='100%' className='sign-in-box'>
         <form
           className={this.state.isAuthenticated ? 'login loading ok' : this.state.isProcessing ? 'login loading' : 'login'}
           onSubmit={this.onSubmit}>
@@ -105,7 +105,7 @@ class SignIn extends Component {
             disabled={this.state.isProcessing}>
             <FontAwesome
               className='spinner'
-              name='spinner' />
+              name='' />
             <span className="state">{this.state.isAuthenticated ? 'Authenticated' : this.state.isProcessing ? 'Signing in...' : 'Sign in'}</span>
           </button>
         </form>

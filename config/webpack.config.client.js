@@ -25,7 +25,7 @@ module.exports = {
   plugins: createEnvAwareArray([
     new webpack.optimize.OccurrenceOrderPlugin(),
     ifDevelopment(new webpack.HotModuleReplacementPlugin()),
-    ifProduction(new webpack.DefinePlugin({ 'process.env.NODE_ENV': '"production"' })),
+    ifProduction(new webpack.DefinePlugin({'process.env.NODE_ENV': '"production"'})),
     ifProduction(new webpack.optimize.UglifyJsPlugin()),
     ifProduction(new ExtractTextPlugin('styles.css'))
   ]),
@@ -54,8 +54,11 @@ module.exports = {
       test: /\.css$/,
       loaders: isProduction ? ExtractTextPlugin.extract('style', ['css']) : ['style', 'css']
     }, {
-      test: /\.woff(2)?(\?v=\d+\.\d+\.\d+)?$/,
-      loader: 'url?limit=10000&minetype=application/font-woff'
+      test: /\.(ico|jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2)(\?.*)?$/,
+      loader: 'file',
+      query: {
+        name: 'static/media/[name].[hash:8].[ext]'
+      }
     }, {
       test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
       loader: 'url?limit=10000&minetype=application/octet-stream'

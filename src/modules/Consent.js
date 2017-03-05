@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
 import FontAwesome from 'react-fontawesome';
-import { authorize } from '../actions';
-import { getParameters, isAuthorized, getCode, getConsentError } from '../selectors';
+import {authorize} from '../actions';
+import {getParameters, isAuthorized, getCode, getConsentError} from '../selectors';
 import utils from '../utils/utils';
 
 // Hydra
@@ -60,13 +60,13 @@ class Consent extends Component {
 
   onCancel(e) {
     e.preventDefault();
-    this.setState({ cancelProcess: true });
+    this.setState({cancelProcess: true});
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.signInError !== null && nextProps.signInError) {
       //console.log("Errorerror: ", nextProps.signInError);
-      this.setState({ error: nextProps.signInError });
+      this.setState({error: nextProps.signInError});
       return;
     }
     if (nextProps.code === null || !nextProps.code) {
@@ -115,9 +115,18 @@ class Consent extends Component {
       return (
         <table className='consent result'>
           <tbody>
-            <tr><td><span className="label">UserId</span></td><td><span className="label">{this.props.parameters.id}</span></td></tr>
-            <tr><td>&nbsp;</td><td>&nbsp;</td></tr>
-            <tr><td><span className="label">Token</span></td><td className='code'><span className='consent'>{this.state.code}</span></td></tr>
+          <tr>
+            <td><span className="label">UserId</span></td>
+            <td><span className="label">{this.props.parameters.id}</span></td>
+          </tr>
+          <tr>
+            <td>&nbsp;</td>
+            <td>&nbsp;</td>
+          </tr>
+          <tr>
+            <td><span className="label">Token</span></td>
+            <td className='code'><span className='consent'>{this.state.code}</span></td>
+          </tr>
           </tbody>
         </table>
       );
@@ -133,7 +142,7 @@ class Consent extends Component {
           <div className="label">
             <FontAwesome
               className='spinner'
-              name='spinner' />
+              name=''/>
             <span>
               You will be redirected shortly...
             </span>
@@ -147,12 +156,17 @@ class Consent extends Component {
     //console.log(this.state);
     if (!this.props.isAuthorized && !this.state.cancelProcess) {
       return (
-        <div width='100%'>
+        <div width='100%' className='sign-in-box'>
           <form className='consent'>
             <div>
               <div className="title">Welcome {this.props.parameters.id}</div>
-              <div className="label resources">Do you authorize 'DBP-Demo-App' to access your resources?
-                 <ul>
+              <div className="label resources">
+                <span className="label resources">
+                  Would you like to grant<br />
+                  <span className="default-color">'Cash 42 application (from C42 Bank)'</span>
+                  <br />access to your following resources?
+                </span>
+                <ul>
                   {this.state.parameters.decodedChallenge.scp.map(function (scope) {
                     return (<li key={scope}>{scope}</li>);
                   })}
@@ -161,8 +175,6 @@ class Consent extends Component {
               <div>
                 <button
                   onClick={this.onSubmit}>
-                  <FontAwesome
-                    name='spinner' />
                   Authorize
                 </button>
                 <button
@@ -196,4 +208,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, { authorize })(Consent);
+export default connect(mapStateToProps, {authorize})(Consent);

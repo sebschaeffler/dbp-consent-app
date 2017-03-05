@@ -1,8 +1,10 @@
 body {
   font-family: "Open Sans", sans-serif;
   height: 100vh;
-  background: url("http://digitalbusinesssolutions.org/wp-content/uploads/2015/12/digitalbusinesssolutions-header.jpg") 50% fixed;
+  background: url("http://digitalbusinesssolutions.org/wp-content/uploads/2015/12/digitalbusinesssolutions-header.jpg") 25% fixed;
   background-size: cover;
+  _background: url(http://digitalbusinesssolutions.org/wp-content/uploads/2015/12/digitalbusinesssolutions-header.jpg) 50% fixed no-repeat;
+  _background-size: 900px;
   color: #fff;
 }
 
@@ -17,6 +19,9 @@ body {
 * {
   box-sizing: border-box;
 }
+.default-color {
+  color: #009;
+}
 #root {
   display: flex;
   align-items: center;
@@ -25,8 +30,29 @@ body {
   width: 100%;
   min-height: 100%;
   /*padding: 20px;*/
-  background: rgba(4, 40, 68, 0.65);
+  _background: rgba(4, 40, 68, 0.65);
+  background: rgba(255, 255, 255, 0.6);
   text-align: center;
+}
+.header {
+  background: #fff;
+  width: 100%;
+  height: 65px;
+  position: fixed;
+  opacity: 0.85;
+  top: 0;
+  left: 0;
+  text-align: center;
+  padding-top: 9px;
+}
+.header-title {
+  color: #009;
+  font-size: 24pt;
+}
+.logo {
+  left: 20px;
+  top: 12px;
+  position: fixed;
 }
 .login, .consent {
   border-radius: 2px 2px 5px 5px;
@@ -169,30 +195,39 @@ body {
 .login:not(.loading) button:focus, .consent:not(.loading) button:focus {
   border-bottom-width: 4px;
 }
-.resources {
-  text-align: left;
-}
 .resources li {
+  text-align: left;
   color: red;
 }
-footer {
-  display: block;
-  padding-top: 50px;
+.footer-div {
+  background: #fff;
+  width: 100%;
+  height: 40px;
+  position: fixed;
+  opacity: 0.85;
+  bottom: 0;
+  left: 0;
   text-align: center;
-  color: #ddd;
-  font-weight: normal;
-  text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
-  font-size: 0.8em;
+  padding: 10px;
+}
+.footer-title {
+  color: #009;
+  font-size: 10pt;
 }
 footer a, footer a:link {
   color: #fff;
   text-decoration: none;
 }
 
-.main_title {
-  padding: 25px;
+.main_title_div {
+  margin: -250px 0 55px 0;
+  color: #009;
+  font-size: 22pt;
 }
-
+.main_title {
+  text-shadow: 1px 1px #ccc;
+  padding-left: 15px;
+}
 .welcome {
   display: block;
   margin: 5px;
@@ -232,4 +267,10 @@ footer a, footer a:link {
 
 .label {
   color: #000;
+  text-align: left;
+}
+
+.sign-in-box {
+  display: block;
+  justify-content: center;
 }

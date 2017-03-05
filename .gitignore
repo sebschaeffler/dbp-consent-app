@@ -12,6 +12,8 @@ build
 # editors
 .vscode/
 .history/
+.idea
+
 typings/
 dist/*
 public/*
